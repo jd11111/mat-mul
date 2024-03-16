@@ -1,8 +1,14 @@
-## Matrix Multiplication
+# Matrix Multiplication in Haskell using the ST Monad
 
+This is a simple three loop implementation of row major order matrix $\times$ column major order matrix multiplication.  
+Employs mutable state via the ST Monad.
+The relevant code is in app/MatMul.hs.
+
+## How it works:
 Indexing starts at 0 here.
+The following is a brief overview of the employed algorithm.
 
-## Storing matrices in a vector
+### Storing matrices in a vector
 Storage of a $n \times m$ matrix in a length $n \cdot m$ vector:
 - **Column major order**: Stack the columns of the matrix ontop of each other. Denoted by $c$.
 - **Row major order**: Stack the rows ontop of each other. Denoted by $r$.
@@ -33,7 +39,7 @@ a_{00} & a_{01} & a_{02} & a_{10} & a_{11} & a_{12} & a_{20} & a_{21} & a_{22}
 ```
 The interesting relation $r \ A^t = c \ A$ (and vice versa) is true (here $t$ denotes the transpose).
 
-## Retrieving value in stored vector by matrix indices
+### Retrieving value in stored vector by matrix indices
 
 Going from matrix to column major storage:  
 Define $I_c : \{0,\dots, n-1\} \times \{0, \dots, m-1\} \to \{0, \dots, n \cdot m -1\} $
@@ -45,7 +51,7 @@ Define $I_r : \{0,\dots, n-1\} \times \{0, \dots, m-1\} \to \{0, \dots, n \cdot 
 by $I_r(i,j) =m \cdot i +  j$.  
 Then $A(i,j) = r \ A \ (I_c (i,j))$ for all $(i,j)$.
 
-## Matrix Multiplication
+### Matrix Multiplication
 
 Let $A \in \mathbb{R}^{N \times M}$ and $B \in \mathbb{R}^{M \times K}$.
 Then $C := A \cdot B \in \mathbb{R}^{N \times K}$ is given by
