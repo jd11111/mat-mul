@@ -1,38 +1,10 @@
 {-# LANGUAGE BangPatterns #-}
 module Main where
 
-import qualified Data.Array.ST
-import Data.Array.Unboxed
-import qualified Control.Monad.ST
-import qualified Data.STRef
-import qualified Control.Monad
-
+import Data.Array.Unboxed ( UArray, listArray )
+import MatMul
 
 test :: UArray Int Float; test = listArray (0,3) (repeat 2.0) 
-
-matMul :: UArray Int Float -> Int -> Int -> UArray Int Float -> Int -> Int -> UArray Int Float
-matMul a ra ca b rb cb =let{
-    getA :: Int -> Int -> Float;
-    getA i j = a!(i*ca + j);
-    {-# INLINE getA #-};
-    getB :: Int -> Int -> Float;
-    getB i j = b!(i*cb + j);
-    {-# INLINE getB #-};
-    }
-    in Control.Monad.ST.runST $ do{
-    arr <- Data.Array.ST.newArray (0,ra*cb-1) 0.0 :: Control.Monad.ST.ST s (Data.Array.ST.STUArray s Int Float);--zero initialised output array
-    Control.Monad.forM_ [0..(ra-1)] $ \i -> do{ --loop over all rows of a
-        Control.Monad.forM_ [0..(cb-1)] $ \j -> do{ --loop over all columns of b
-            let z = Control.Monad.ST.runST $ do{ 
-            acc <- Data.STRef.newSTRef 0.0; --zero initialised accumulator variable
-            Control.Monad.forM_ [0..(ca-1)] $ \k -> do{Data.STRef.modifySTRef acc (+ (getA i k + getB k j))};--accumulate a*b(i,j) in acc
-            Data.STRef.readSTRef acc --return (an immutable copy of) the accumulator
-            } in
-            Data.Array.ST.writeArray arr (i+ra*j) z; --write the returned value to the output array
-        };
-    };
-    Data.Array.ST.freeze arr; --return an immutable copy of the output array
-    }
 
 main :: IO ()
 main =do{
