@@ -4,10 +4,12 @@ module Main where
 import Data.Array.Unboxed ( UArray, listArray )
 import MatMul
 
-test :: UArray Int Float; test = listArray (0,3) (repeat 2.0) 
+testa :: UArray Int Float; testa = listArray (0,3) [1,2,3,9]
+testb :: UArray Int Float; testb = listArray (0,3) [5,3,2,7]
 
 main :: IO ()
 main =do{
-print $ test;
-print $ matMul test 2 2 test 2 2;
+print $ testa;
+print $ testb;
+print $ matMul testa 2 2 testb 2 2;
 }
