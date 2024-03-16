@@ -1,11 +1,9 @@
 {-# LANGUAGE BangPatterns #-}
 module Main where
-
 import Data.Time.Clock
 import Data.Array.Unboxed
 import MatMul
 import System.Random
-
 main = do
     gen <- newStdGen
     let ns = randoms gen :: [Float]
