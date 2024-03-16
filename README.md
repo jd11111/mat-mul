@@ -18,15 +18,19 @@ a_{20} & a_{21} & a_{22}
  \end{pmatrix} \in  \mathbb{R}^{3 \times 3}
 ```
 Then $A$ stored in column major order will be:
-$$c \ A := 
+```math
+c \ A := 
 \begin{pmatrix}
 a_{00} & a_{10} & a_{20} & a_{01} & a_{11} & a_{21} & a_{02} & a_{12} & a_{22}
- \end{pmatrix} \in  \mathbb{R}^{9}$$
+ \end{pmatrix} \in  \mathbb{R}^{9}
+```
 and $A$ stored in row major order will be:
-$$r \ A := 
+```math
+r \ A := 
 \begin{pmatrix}
 a_{00} & a_{01} & a_{02} & a_{10} & a_{11} & a_{12} & a_{20} & a_{21} & a_{22}
- \end{pmatrix} \in  \mathbb{R}^{9}$$
+ \end{pmatrix} \in  \mathbb{R}^{9}
+```
 The interesting relation $r \ A^t = c \ A$ (and vice versa) is true (here $t$ denotes the transpose).
 
 ## Retrieving value in stored vector by matrix indices
