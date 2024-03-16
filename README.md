@@ -42,12 +42,12 @@ The interesting relation $r \ A^t = c \ A$ (and vice versa) is true (here $t$ de
 ### Retrieving value in stored vector by matrix indices
 
 Going from matrix to column major storage:  
-Define $I_c : \{0,\dots, n-1\} \times \{0, \dots, m-1\} \to \{0, \dots, n \cdot m -1\} $
+Define $I_c : \\{0,\dots, n-1\\} \times \\{0, \dots, m-1  0 \\} \to \\{0, \dots, n \cdot m -1\\} $
 by $I_c(i,j) =i + n \cdot j$.  
 Then $A(i,j) = c \ A \ (I_c (i,j))$ for all $(i,j)$.
 
 Going from matrix to row major storage:  
-Define $I_r : \{0,\dots, n-1\} \times \{0, \dots, m-1\} \to \{0, \dots, n \cdot m -1\} $
+Define $I_r : \\{0,\dots, n-1\\} \times \\{0, \dots, m-1\\} \to \\{0, \dots, n \cdot m -1\\} $
 by $I_r(i,j) =m \cdot i +  j$.  
 Then $A(i,j) = r \ A \ (I_c (i,j))$ for all $(i,j)$.
 
