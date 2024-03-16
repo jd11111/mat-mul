@@ -31,6 +31,7 @@ r \ A :=
 a_{00} & a_{01} & a_{02} & a_{10} & a_{11} & a_{12} & a_{20} & a_{21} & a_{22}
  \end{pmatrix} \in  \mathbb{R}^{9}
 $$
+The interesting relation $r \ A^t = c \ A$ (and vice versa) is true (here $t$ denotes the transpose).
 
 ## Retrieving value in stored vector by matrix indices
 
