@@ -9,12 +9,14 @@ Storage of a $n \times m$ matrix in a length $n \cdot m$ vector:
 
 For example:
 Let
-$$A := 
+```math
+A := 
 \begin{pmatrix}
-a_{00} & a_{01} & a_{02} \\\
-a_{10} & a_{11} & a_{12} \\\
+a_{00} & a_{01} & a_{02} \\
+a_{10} & a_{11} & a_{12} \\
 a_{20} & a_{21} & a_{22}
- \end{pmatrix} \in  \mathbb{R}^{3 \times 3}$$
+ \end{pmatrix} \in  \mathbb{R}^{3 \times 3}
+```
 Then $A$ stored in column major order will be:
 $$c \ A := 
 \begin{pmatrix}
