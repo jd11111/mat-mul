@@ -7,10 +7,11 @@ import qualified Control.Monad.ST
 import qualified Data.STRef
 import qualified Control.Monad
 
-data Matrix = GenMat{int_data :: UArray Int Float, rows :: Int, cols :: Int} deriving Show
+--define custom matrix type: int_data are the entries of the matrix stored in row major order, rows and cols are obvious
+data Matrix = GenMat{int_data :: UArray Int Float, rows :: Int, cols :: Int} deriving Show 
 
 matMul :: Matrix -> Matrix -> Matrix
-matMul x y  =let{
+matMul x y = let{
     a = int_data x;
     ra = rows x;
     ca = cols x;
@@ -31,11 +32,10 @@ matMul x y  =let{
         Control.Monad.forM_ [0..(ra-1)] $ \i -> do{ --loop over all rows of a
             Control.Monad.forM_ [0..(cb-1)] $ \j -> do{ --loop over all columns of b
                 Control.Monad.forM_ [0..(ca-1)] $ \k -> do{
-                    let{var = (getA i k * getB k j)}
-                    in Data.STRef.modifySTRef' acc (+ var); --using strict modifySTRef' (important) to accumulate (a*b)(i,j) in acc
+                    Data.STRef.modifySTRef' acc (+ (getA i k * getB k j)); --using strict modifySTRef' (important) to accumulate (a*b)(i,j) in acc
                     };
-                z <- Data.STRef.readSTRef acc;
-                Data.Array.ST.writeArray arr (i*cb+j) z; --write the value in the accumulator to the appropriate position
+                var <- Data.STRef.readSTRef acc;
+                Data.Array.ST.writeArray arr (i*cb+j) var; --write the value in the accumulator to the appropriate position
                 Data.STRef.writeSTRef acc 0.0; --set accumulator to zero for next loop
             };
         };

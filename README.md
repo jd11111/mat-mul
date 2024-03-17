@@ -2,7 +2,9 @@
 
 This is a simple three loop implementation of row major order matrix $\times$ column major order matrix multiplication.  
 Employs mutable state via the ST Monad.
+Does not use unsafe stuff (could probably run faster if it did).
 The relevant code is in app/MatMul.hs.
+Runs around 10x slower than the same algorithm implemented in rust.
 
 ## How it works:
 Indexing starts at 0 here.
@@ -59,5 +61,6 @@ $$C (i,j) := \sum_{k=0}^{M-1} A(i,k) \cdot B(k,j).$$
 To calculate $C(i,j)$ we need to access the $i$-th row of $A$ and the $j$-th column of $B$.
 We want these values to be cached on the CPU. Therefore
 all the values of the $i$-th row of $A$ and the $j$-th column of $B$ need to be close together in memory.
-This is achieved if $A$ is stored in row major order and $B$ in column major order.
-This is not done here for now.
+This is achieved if $A$ is stored in row major order and $B$ in column major order.  
+It should not make a big difference, as long as the matrices are small.  
+For now this is not implemented in the code.
