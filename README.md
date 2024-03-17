@@ -60,3 +60,4 @@ To calculate $C(i,j)$ we need to access the $i$-th row of $A$ and the $j$-th col
 We want these values to be cached on the CPU. Therefore
 all the values of the $i$-th row of $A$ and the $j$-th column of $B$ need to be close together in memory.
 This is achieved if $A$ is stored in row major order and $B$ in column major order.
+This is not done here for now.
