@@ -21,12 +21,12 @@ matMul x y =
       b = int_data y
       rb = rows y
       cb = cols y
-   in let getA :: Int -> Int -> Float
+   in let {-# INLINE getA #-}
+          getA :: Int -> Int -> Float
           getA i j = Data.Array.Base.unsafeAt a (i * ca + j) -- access the (i,j) entry of a from the row major storage
-          {-# INLINE getA #-}
+          {-# INLINE getB #-}
           getB :: Int -> Int -> Float
           getB i j = Data.Array.Base.unsafeAt b (i * cb + j) -- access the (i,j) entry of b from the row major storage
-          {-# INLINE getB #-}
        in let !z = Data.Array.ST.runSTUArray $ do
                 arr <- Data.Array.ST.newArray (0, ra * cb - 1) 0.0 :: Control.Monad.ST.ST s (Data.Array.ST.STUArray s Int Float) -- zero initialised output array
                 Control.Monad.forM_ [0 .. (ra - 1)] $ \i -> do

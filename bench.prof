@@ -1,54 +1,47 @@
-	Sat Mar 16 15:35 2024 Time and Allocation Profiling Report  (Final)
+	Tue Apr  2 17:40 2024 Time and Allocation Profiling Report  (Final)
 
-	   bench +RTS -p -RTS
+	   bench +RTS -p -s -RTS
 
-	total time  =        0.00 secs   (4 ticks @ 1000 us, 1 processor)
-	total alloc =   3,284,968 bytes  (excludes profiling overheads)
+	total time  =        0.65 secs   (654 ticks @ 1000 us, 1 processor)
+	total alloc =  91,127,096 bytes  (excludes profiling overheads)
 
-COST CENTRE    MODULE                 SRC                                             %time %alloc
+COST CENTRE MODULE                 SRC                                             %time %alloc
 
-matMul.\.\.z   MatMul                 app/MatMul.hs:(24,17)-(28,13)                    75.0    9.2
-matMul.\.\.z.\ MatMul                 app/MatMul.hs:26:53-109                          25.0   60.9
-nextWord64     System.Random.SplitMix src/System/Random/SplitMix.hs:(121,1)-(123,29)    0.0    4.9
-nextWord32     System.Random.SplitMix src/System/Random/SplitMix.hs:(129,1)-(136,28)    0.0    8.5
-main.testb     Main                   app/bench.hs:13:9-71                              0.0    4.6
-main.testa     Main                   app/bench.hs:12:9-71                              0.0    4.6
-main.ns        Main                   app/bench.hs:11:9-35                              0.0    4.9
-CAF            GHC.IO.Handle.FD       <entire-module>                                   0.0    1.1
+matMul      MatMul                 app/MatMul.hs:(17,1)-(40,57)                     97.4    1.2
+nextWord32  System.Random.SplitMix src/System/Random/SplitMix.hs:(129,1)-(136,28)    1.5   30.7
+main        Main                   app/bench.hs:(13,1)-(24,54)                       1.1   50.5
+nextWord64  System.Random.SplitMix src/System/Random/SplitMix.hs:(121,1)-(123,29)    0.0   17.6
 
 
-                                                                                                                                 individual      inherited
-COST CENTRE           MODULE                                   SRC                                            no.     entries  %time %alloc   %time %alloc
+                                                                                                                         individual      inherited
+COST CENTRE   MODULE                                   SRC                                            no.     entries  %time %alloc   %time %alloc
 
-MAIN                  MAIN                                     <built-in>                                     194           0    0.0    0.0   100.0  100.0
- CAF                  Data.Fixed                               <entire-module>                                371           0    0.0    0.0     0.0    0.0
- CAF                  GHC.Conc.Signal                          <entire-module>                                334           0    0.0    0.0     0.0    0.0
- CAF                  GHC.IO.Encoding                          <entire-module>                                299           0    0.0    0.1     0.0    0.1
- CAF                  GHC.IO.Encoding.Iconv                    <entire-module>                                297           0    0.0    0.0     0.0    0.0
- CAF                  GHC.IO.Handle.FD                         <entire-module>                                288           0    0.0    1.1     0.0    1.1
- CAF                  Data.Time.Clock.Internal.NominalDiffTime <entire-module>                                226           0    0.0    0.0     0.0    0.0
- CAF                  Data.Time.Clock.Internal.SystemTime      <entire-module>                                225           0    0.0    0.0     0.0    0.0
- CAF                  Main                                     <entire-module>                                207           0    0.0    0.0     0.0    0.0
-  main                Main                                     app/bench.hs:(9,1)-(17,56)                     388           1    0.0    0.0     0.0    0.0
- CAF                  System.Random.Internal                   <entire-module>                                205           0    0.0    0.0     0.0    0.0
-  theStdGen           System.Random.Internal                   src/System/Random/Internal.hs:587:1-64         391           1    0.0    0.0     0.0    0.0
-   initSMGen          System.Random.SplitMix                   src/System/Random/SplitMix.hs:381:1-36         393           0    0.0    0.0     0.0    0.0
-    mkSMGen           System.Random.SplitMix                   src/System/Random/SplitMix.hs:377:1-61         396           1    0.0    0.0     0.0    0.0
- CAF                  System.Random.SplitMix                   <entire-module>                                203           0    0.0    0.0     0.0    0.0
-  initSMGen           System.Random.SplitMix                   src/System/Random/SplitMix.hs:381:1-36         392           1    0.0    0.0     0.0    0.0
- CAF                  System.Random.SplitMix.Init              <entire-module>                                201           0    0.0    0.0     0.0    0.0
-  initialSeed         System.Random.SplitMix.Init              src/System/Random/SplitMix/Init.hs:40:1-26     394           1    0.0    0.0     0.0    0.0
- main                 Main                                     app/bench.hs:(9,1)-(17,56)                     389           0    0.0    0.4   100.0   98.8
-  main.ns             Main                                     app/bench.hs:11:9-35                           398           1    0.0    4.9     0.0   18.3
-   nextWord32         System.Random.SplitMix                   src/System/Random/SplitMix.hs:(129,1)-(136,28) 399        2500    0.0    8.5     0.0   13.4
-    nextWord64        System.Random.SplitMix                   src/System/Random/SplitMix.hs:(121,1)-(123,29) 400        2500    0.0    4.9     0.0    4.9
-  main.testa          Main                                     app/bench.hs:12:9-71                           397           1    0.0    4.6     0.0    4.6
-  main.testb          Main                                     app/bench.hs:13:9-71                           401           1    0.0    4.6     0.0    4.6
-  main.testc          Main                                     app/bench.hs:15:9-47                           402           1    0.0    0.0   100.0   71.0
-   matMul             MatMul                                   app/MatMul.hs:(12,1)-(33,5)                    403           1    0.0    0.6   100.0   71.0
-    matMul.\          MatMul                                   app/MatMul.hs:(22,45)-(31,5)                   404          50    0.0    0.3   100.0   70.4
-     matMul.\.\       MatMul                                   app/MatMul.hs:(23,49)-(30,9)                   405        2500    0.0    0.0   100.0   70.1
-      matMul.\.\.z    MatMul                                   app/MatMul.hs:(24,17)-(28,13)                  406        2500   75.0    9.2   100.0   70.1
-       matMul.\.\.z.\ MatMul                                   app/MatMul.hs:26:53-109                        407      125000   25.0   60.9    25.0   60.9
-  newStdGen           System.Random                            src/System/Random.hs:504:1-55                  390           1    0.0    0.0     0.0    0.0
-   splitSMGen         System.Random.SplitMix                   src/System/Random/SplitMix.hs:(225,1)-(229,31) 395           1    0.0    0.0     0.0    0.0
+MAIN          MAIN                                     <built-in>                                     194           0    0.0    0.0   100.0  100.0
+ CAF          Data.Fixed                               <entire-module>                                371           0    0.0    0.0     0.0    0.0
+ CAF          GHC.Conc.Signal                          <entire-module>                                334           0    0.0    0.0     0.0    0.0
+ CAF          GHC.IO.Encoding                          <entire-module>                                299           0    0.0    0.0     0.0    0.0
+ CAF          GHC.IO.Encoding.Iconv                    <entire-module>                                297           0    0.0    0.0     0.0    0.0
+ CAF          GHC.IO.Handle.FD                         <entire-module>                                288           0    0.0    0.0     0.0    0.0
+ CAF          Data.Time.Clock.Internal.NominalDiffTime <entire-module>                                226           0    0.0    0.0     0.0    0.0
+ CAF          Data.Time.Clock.Internal.SystemTime      <entire-module>                                225           0    0.0    0.0     0.0    0.0
+ CAF          Main                                     <entire-module>                                207           0    0.0    0.0     0.0    0.0
+  m           Main                                     app/bench.hs:11:1-9                            397           1    0.0    0.0     0.0    0.0
+  main        Main                                     app/bench.hs:(13,1)-(24,54)                    388           1    0.0    0.0     0.0    0.0
+  n           Main                                     app/bench.hs:9:1-7                             398           1    0.0    0.0     0.0    0.0
+ CAF          System.Random.Internal                   <entire-module>                                205           0    0.0    0.0     0.0    0.0
+  theStdGen   System.Random.Internal                   src/System/Random/Internal.hs:587:1-64         391           1    0.0    0.0     0.0    0.0
+   initSMGen  System.Random.SplitMix                   src/System/Random/SplitMix.hs:381:1-36         393           0    0.0    0.0     0.0    0.0
+    mkSMGen   System.Random.SplitMix                   src/System/Random/SplitMix.hs:377:1-61         396           1    0.0    0.0     0.0    0.0
+ CAF          System.Random.SplitMix                   <entire-module>                                203           0    0.0    0.0     0.0    0.0
+  initSMGen   System.Random.SplitMix                   src/System/Random/SplitMix.hs:381:1-36         392           1    0.0    0.0     0.0    0.0
+ CAF          System.Random.SplitMix.Init              <entire-module>                                201           0    0.0    0.0     0.0    0.0
+  initialSeed System.Random.SplitMix.Init              src/System/Random/SplitMix/Init.hs:40:1-26     394           1    0.0    0.0     0.0    0.0
+ main         Main                                     app/bench.hs:(13,1)-(24,54)                    389           0    1.1   50.5   100.0  100.0
+  nextWord32  System.Random.SplitMix                   src/System/Random/SplitMix.hs:(129,1)-(136,28) 399      250000    1.5   30.7     1.5   48.3
+   nextWord64 System.Random.SplitMix                   src/System/Random/SplitMix.hs:(121,1)-(123,29) 400      250000    0.0   17.6     0.0   17.6
+  matMul      MatMul                                   app/MatMul.hs:(17,1)-(40,57)                   401           1   97.4    1.2    97.4    1.2
+   cols       MatMul                                   app/MatMul.hs:14:85-88                         403           2    0.0    0.0     0.0    0.0
+   int_data   MatMul                                   app/MatMul.hs:14:23-30                         404           2    0.0    0.0     0.0    0.0
+   rows       MatMul                                   app/MatMul.hs:14:72-75                         402           1    0.0    0.0     0.0    0.0
+  newStdGen   System.Random                            src/System/Random.hs:504:1-55                  390           1    0.0    0.0     0.0    0.0
+   splitSMGen System.Random.SplitMix                   src/System/Random/SplitMix.hs:(225,1)-(229,31) 395           1    0.0    0.0     0.0    0.0

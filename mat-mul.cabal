@@ -79,8 +79,9 @@ executable mat-mul
 Benchmark bench
     type:             exitcode-stdio-1.0
     main-is:          bench.hs
+    other-modules: MatMul
     hs-source-dirs: app
     build-depends:    base, time, random, array
     default-language: Haskell2010
-    ghc-options: -O2
-    ---prof -fprof-auto -rtsopts "-with-rtsopts=-p"
+    profiling: --enable-profiling
+    ghc-options: -O2 -rtsopts "-with-rtsopts=-p -s"
