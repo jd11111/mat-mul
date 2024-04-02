@@ -80,7 +80,7 @@ Benchmark bench
     type:             exitcode-stdio-1.0
     main-is:          bench.hs
     hs-source-dirs: app
-    build-depends:    base, time, random,array
+    build-depends:    base, time, random, array
     default-language: Haskell2010
     ghc-options: -O2
     ---prof -fprof-auto -rtsopts "-with-rtsopts=-p"
