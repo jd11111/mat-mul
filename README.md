@@ -1,10 +1,13 @@
 # Matrix Multiplication in Haskell using the ST Monad
 
-This is a simple three loop implementation of row major order matrix $\times$ column major order matrix multiplication.  
+This is a simple three loop implementation of row major order matrix matrix multiplication.  
 Employs mutable state via the ST Monad.
-Does not use unsafe stuff (could probably run faster if it did).
+Uses unsafe (without bound checks) array read and write. 
 The relevant code is in app/MatMul.hs.
-Runs around 10x slower than the same algorithm implemented in rust.
+Runs around the speed of the same algorithm implemented in safe rust (so pretty fast).
+
+## Usage:
+Run ```cabal run bench``` to get the time it takes to multiply two random 500x500 matrices.
 
 ## How it works:
 Indexing starts at 0 here.
