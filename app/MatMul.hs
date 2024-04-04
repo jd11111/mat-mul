@@ -31,10 +31,10 @@ matMul x y =
                 arr <- Data.Array.ST.newArray (0, ra * cb - 1) 0.0 :: Control.Monad.ST.ST s (Data.Array.ST.STUArray s Int Float) -- zero initialised output array
                 Control.Monad.forM_ [0 .. (ra - 1)] $ \i -> do
                   -- loop over all rows of a
-                  Control.Monad.forM_ [0 .. (cb - 1)] $ \j -> do
+                  Control.Monad.forM_ [0 .. (cb - 1)] $ \j -> do{
                     -- loop over all columns of b
-                    Control.Monad.forM_ [0 .. (ca - 1)] $ \k -> do
-                      var <- Data.Array.Base.unsafeRead arr (i * cb + j)
-                      Data.Array.Base.unsafeWrite arr (i * cb + j) (var + (getA i k * getB k j))
+                    let inner k !var | ca <= k = var | otherwise = inner (k + 1) (var + getA i k * getB k j)
+                    in Data.Array.Base.unsafeWrite arr (i * cb + j) (inner 0 0.0);}
                 return arr
            in GenMat {int_data = z, rows = ra, cols = cb}
+
