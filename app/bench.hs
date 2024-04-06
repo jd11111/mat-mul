@@ -4,7 +4,6 @@ import Data.Array.Unboxed
 import Data.Time.Clock
 import MatMul
 import System.Random
-import MatMul (realTrace)
 
 n :: Int
 n = 500
@@ -37,4 +36,17 @@ main = do
   print "doubles:"
   putStrLn $ "matmul " ++ show (diffUTCTime end start)
   print $ realTrace (realScaMul 5.0 matad);
+  start <- getCurrentTime
+  let !testc = matMul matad matbd;
+  end <- getCurrentTime
+  let ns = randoms gen :: [Float]
+  let !testca = listArray (0, 2*m - 1) (take (2*m) ns) :: UArray Int Float
+  let !testcb = listArray (0, 2*m - 1) (take (2*m) ns) :: UArray Int Float
+  let !matca = GenCoMat{int_cdata = testca, c_cols = n, c_rows = n};
+  let !matcb = GenCoMat{int_cdata = testcb, c_cols = n, c_rows = n};
+  start <- getCurrentTime
+  let !testc = complexMatMul matca matcb;
+  end <- getCurrentTime
+  putStrLn $ "matmul complex" ++ show (diffUTCTime end start)
+
 

@@ -10,12 +10,10 @@ import qualified Control.Monad
 import qualified Control.Monad.ST
 import qualified Data.Array.Base
 import qualified Data.Array.ST
-import qualified Data.Array.Unboxed
 import Data.Array.Unboxed
 import Data.Complex
-import qualified Data.Array.Base as Data.Array.Unboxed
 
-class (Num a, Show a, Fractional a) => MyNums a where
+class ( Show a, RealFloat a) => MyNums a where
   myUnsafeAt ::Data.Array.Unboxed.UArray Int a -> Int -> a
   myNewArray :: (Int, Int) -> a -> Control.Monad.ST.ST s (Data.Array.ST.STUArray s Int a);
   myUnsafeWrite :: Data.Array.ST.STUArray s Int a -> Int -> a -> Control.Monad.ST.ST s ();
@@ -33,19 +31,23 @@ instance MyNums Double where
   myUnsafeWrite = Data.Array.Base.unsafeWrite :: Data.Array.ST.STUArray s Int Double -> Int -> Double -> Control.Monad.ST.ST s ();
   myListArray = listArray;
 
-class (MyNums a) => RealMat m a where
-  cols :: m a -> Int
-  rows :: m a -> Int 
+class (ProtoMat m a, MyNums a) => RealMat m a where
   int_data :: m a -> Data.Array.Unboxed.UArray Int a
   mkRealMat :: Data.Array.Unboxed.UArray Int a -> Int -> Int -> m a
 
 data family MyMatrix a
 
+class ProtoMat m a where
+  cols :: m a -> Int
+  rows :: m a -> Int
+
 data instance MyMatrix Float = GenFMat {intf_data :: Data.Array.Unboxed.UArray Int Float, f_rows :: Int, f_cols :: Int}
 
-instance RealMat MyMatrix Float where
+instance ProtoMat MyMatrix Float where
   cols = f_cols
   rows = f_rows
+
+instance RealMat MyMatrix Float where
   int_data  = intf_data
   mkRealMat a r c = GenFMat{intf_data = a, f_rows = r, f_cols = c}
 
@@ -66,20 +68,49 @@ instance Matrix MyMatrix Double where
 
 data instance MyMatrix Double = GenDMat {intd_data :: Data.Array.Unboxed.UArray Int Double, d_rows :: Int, d_cols :: Int}
 
-instance RealMat MyMatrix Double where
+instance ProtoMat MyMatrix Double where
   cols = d_cols
   rows = d_rows
+
+instance RealMat MyMatrix Double where
   int_data = intd_data
   mkRealMat a r c = GenDMat{intd_data = a, d_rows = r, d_cols = c}
 
-data instance MyMatrix (Complex a)  = GenCoMat {intc_data :: (Data.Array.Unboxed.UArray Int a,Data.Array.Unboxed.UArray Int a), c_rows :: Int, c_cols :: Int}
+data instance (MyNums a) => MyMatrix (Complex a)  = GenCoMat {int_cdata :: Data.Array.Unboxed.UArray Int a, c_rows :: Int, c_cols :: Int}
 
+instance (MyNums a) => ProtoMat MyMatrix (Complex a) where
+  cols = c_cols
+  rows = c_rows
 
--- define custom matrix type: int_data are the entries of the matrix stored in row major order, rows and cols are obvious
---data (MyNums a) => RealMatrix a = GenMat {int_data :: Data.Array.Unboxed.UArray Int a, rows :: Int, cols :: Int}
---data ComplexMatrix = GenCompMat {re_data :: Data.Array.Unboxed.UArray Int Float, im_data :: Data.Array.Unboxed.UArray Int Float, cm_rows :: Int, cm_cols :: Int} deriving (Show)
+{-# INLINE complexMatMul #-}
+complexMatMul :: (MyNums a) => MyMatrix (Complex a) -> MyMatrix (Complex a) -> MyMatrix (Complex a)
+complexMatMul x y =
+  let{a = int_cdata x;
+      ra = rows x;
+      ca = cols x;
+      b = int_cdata y;
+      rb = rows y;
+      cb = cols y;
+      {-# INLINE getReA #-};
+      getReA i j = myUnsafeAt a (2*(i * ca + j));
+      {-# INLINE getImA #-};
+      getImA i j = myUnsafeAt a (2*(i * ca + j)+1);
+      {-# INLINE getReB #-};
+      getReB i j = myUnsafeAt b (2*(i * ca + j));
+      {-# INLINE getImB #-};
+      getImB i j = myUnsafeAt b (2*(i * ca + j)+1);
+      !z = Data.Array.ST.runSTUArray $ do{
+                arr <- myNewArray (0, 2*ra * cb - 1) 0.0;
+                Control.Monad.forM_ [0 .. (ra - 1)] $ \i -> do{
+                  Control.Monad.forM_ [0 .. (cb - 1)] $ \j -> do{
+                    let {inner k !var | ca <= k = var | otherwise = inner (k + 1) (var + (getReA i k :+ getImA i k) * (getReB k j :+ getImB k j)); res = inner 0 0.0;}
+                    in do{ myUnsafeWrite arr (2*(i * cb + j)) (realPart res); myUnsafeWrite arr (2*(i * cb + j)+1) (imagPart res);}
+                  };
+                };
+              return arr};
+      } in if ca == rb then GenCoMat{int_cdata = z, c_rows = ra, c_cols = cb} else undefined
 
-{-# INLINE realMatMul #-}
+{-# INLINE realMatMul #-} --change this back to low level implementation ?
 realMatMul :: RealMat m a => m a -> m a -> m a
 realMatMul x y =
   let{a = int_data x;
@@ -93,7 +124,8 @@ realMatMul x y =
       getA i j = myUnsafeAt a (i * ca + j); -- access the (i,j) entry of a from the row major storage
       {-# INLINE getB #-};
       --getB :: Int -> Int -> t;
-      getB i j = myUnsafeAt b (i * cb + j); -- access the (i,j) entry of b from the row major storage
+      --getB i j = myUnsafeAt b (i * cb + j); -- access the (i,j) entry of b from the row major storage
+      getB i j = myUnsafeAt b (i * cb + j); -- access the (i,j) entry of b from the row major storage --revert this!
       !z = Data.Array.ST.runSTUArray $ do{
                 arr <- myNewArray (0, ra * cb - 1) 0.0;-- :: Control.Monad.ST.ST s (Data.Array.ST.STUArray s Int Float); -- zero initialised output array
                 Control.Monad.forM_ [0 .. (ra - 1)] $ \i -> do{
@@ -105,7 +137,7 @@ realMatMul x y =
                   };
                 };
               return arr};
-      } in mkRealMat z ra cb
+      } in if ca == rb then mkRealMat z ra cb else undefined
 
 realTrace :: RealMat m a => m a -> a
 realTrace x =

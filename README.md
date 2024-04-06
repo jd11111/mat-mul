@@ -44,10 +44,30 @@ a_{00} & a_{01} & a_{02} & a_{10} & a_{11} & a_{12} & a_{20} & a_{21} & a_{22}
 ```
 The interesting relation $r \ A^t = c \ A$ (and vice versa) is true (here $t$ denotes the transpose).
 
+## Storing Complex Matrices
+First do row major order, then
+store real part and imaginary part next to each other.
+```math
+A := 
+\begin{pmatrix}
+a_{00} & a_{01} & a_{02} \\
+a_{10} & a_{11} & a_{12} \\
+a_{20} & a_{21} & a_{22}
+ \end{pmatrix} \in  \mathbb{R}^{3 \times 3}
+```
+and $A$ stored in row major order will be:
+```math
+r \ A := 
+\begin{pmatrix}
+\Re a_{00} & \Im a_{00}  & \Re a_{01} & \Im a_{01} & \Re a_{02} &\Im a_{02}  & a_{10} & a_{11} & a_{12} & a_{20} & a_{21} & a_{22}
+ \end{pmatrix} \in  \mathbb{R}^{2 \cdot 9}
+```
+
+
 ### Retrieving value in stored vector by matrix indices
 
 Going from matrix to column major storage:  
-Define $I_c : \\{0,\dots, n-1\\} \times \\{0, \dots, m-1  0 \\} \to \\{0, \dots, n \cdot m -1\\} $
+Define $I_c : \\{0,\dots, n-1\\} \times \\{0, \dots, m-1   \\} \to \\{0, \dots, n \cdot m -1\\} $
 by $I_c(i,j) =i + n \cdot j$.  
 Then $A(i,j) = c \ A \ (I_c (i,j))$ for all $(i,j)$.
 
