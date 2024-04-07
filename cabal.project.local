@@ -1,4 +1,0 @@
-ignore-project: False
-optimization :2
---profiling: True
---profiling-detail: toplevel-functions
