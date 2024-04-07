@@ -53,7 +53,7 @@ extra-doc-files:    CHANGELOG.md
 common warnings
     ghc-options: -Wall
 
-library mat-mul-lib
+library mat-mul
     -- Import common warning flags.
     import:           warnings
     exposed-modules: MatMul
@@ -86,7 +86,7 @@ executable bench
     -- other-extensions:
 
     -- Other library packages from which modules are imported.
-    build-depends:    base , array, time, random, array, mat-mul-lib
+    build-depends:    base , array, time, random, array, mat-mul
 
     -- Directories containing source files.
     hs-source-dirs:   app
