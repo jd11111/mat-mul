@@ -64,7 +64,7 @@ library mat-mul-lib
     -- other-extensions:
 
     -- Other library packages from which modules are imported.
-    build-depends:    base ^>=4.17.2.1, array
+    build-depends:    base , array
     -- Directories containing source files.
     hs-source-dirs:   lib
 
@@ -86,7 +86,7 @@ executable bench
     -- other-extensions:
 
     -- Other library packages from which modules are imported.
-    build-depends:    base ^>=4.17.2.1, array, time, random, array, mat-mul-lib
+    build-depends:    base , array, time, random, array, mat-mul-lib
 
     -- Directories containing source files.
     hs-source-dirs:   app
